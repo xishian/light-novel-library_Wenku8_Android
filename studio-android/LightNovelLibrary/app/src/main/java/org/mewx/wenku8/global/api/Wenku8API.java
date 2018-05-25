@@ -4,20 +4,18 @@ import android.content.ContentValues;
 import android.util.Log;
 
 import com.umeng.analytics.MobclickAgent;
+import com.umeng.onlineconfig.OnlineConfigAgent;
 
-import org.apache.http.NameValuePair;
-import org.apache.http.message.BasicNameValuePair;
 import org.mewx.wenku8.MyApp;
 import org.mewx.wenku8.global.GlobalConfig;
 import org.mewx.wenku8.util.LightBase64;
 import org.mewx.wenku8.util.LightNetwork;
 import org.mewx.wenku8.R;
 
-import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
-@SuppressWarnings({"UnusedDeclaration"})
+@SuppressWarnings("unused")
 public class Wenku8API {
 
     /**
@@ -33,7 +31,7 @@ public class Wenku8API {
 
     public static String getBaseURL() {
         if(NoticeString.equals("") || NoticeString.equals("http://weuku8.mewx.org")) {
-            NoticeString = MobclickAgent.getConfigParams(MyApp.getContext(), GlobalConfig.getCurrentLang() != LANG.SC ? "wenku8_notice_tw" : "wenku8_notice");
+            NoticeString = OnlineConfigAgent.getInstance().getConfigParams(MyApp.getContext(), GlobalConfig.getCurrentLang() != LANG.SC ? "wenku8_notice_tw" : "wenku8_notice");
         }
         return BaseURL;
     }
@@ -518,14 +516,14 @@ public class Wenku8API {
     }
 
     public static ContentValues getNovelListByLibrary(int sortId, int page) {
-        // sortId is from "getLibraryList"
+        // sortId is from "getLibraryList" above
         return getEncryptedCV("action=articlelist&sort=" + sortId + "&page="
                 + page);
     }
 
     public static ContentValues getNovelListByLibraryWithInfo(int sortId,
                                                               int page, LANG l) {
-        // sortId is from "getLibraryList"
+        // sortId is from "getLibraryList" above
         return getEncryptedCV("action=novellist&sort=" + sortId + "&page="
                 + page + "&t=" + getLANG(l));
     }
@@ -543,7 +541,7 @@ public class Wenku8API {
      */
     public static ContentValues getUserLoginParams(String username, String password) {
         // 使用session方式判断是否已登录
-        Log.e("MewX", "Uname: " + username + "\nPwd: " + password + " (" + LightNetwork.encodeToHttp(password) + ")");
+//        Log.e("MewX", "Uname: " + username + "\nPwd: " + password + " (" + LightNetwork.encodeToHttp(password) + ")");
         String temp = "action=login&username=" + LightNetwork.encodeToHttp(username) + "&password=" + LightNetwork.encodeToHttp(password);
         return getEncryptedCV(temp);
     }
